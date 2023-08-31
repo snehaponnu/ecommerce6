@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        Welcome to SHOPSY where you can buy different items
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{category.name}}SHOPSY
+    {% else %}
+        See our new collections
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'shop:allProdCat' %}">Our product collections</a> </p>
+            </div>
+        </div>
+    </div>
+   {% endif %}
+<div class="mx-auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+    <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <img src="{% static 'img/banner100.png' %}" alt="our products" width="1550" height="550">
+</div><br>
+<div>
+    <h1 class="text-center my_title">Our collections</h1>
+    <p class="text-justify">In a world where shopping is not merely a task but a delightful experience, emerges a platform that seamlessly blends technology, convenience, and style into one captivating ensemble - Shopmart. As the sun rises on the digital realm of retail, Shopmart stands as a beacon of boundless possibilities, redefining the way we explore, discover, and acquire the finest array of products.Step into a universe where every click unveils a universe of choices, where desires take shape, and aspirations find their perfect match. With an unwavering commitment to bringing the world's best to your fingertips, Shopmart curates a mosaic of products that transcend mere utility, transforming each purchase into a chapter of your personal narrative. </p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
